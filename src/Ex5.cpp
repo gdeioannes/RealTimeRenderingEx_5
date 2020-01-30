@@ -37,8 +37,6 @@ public:
 		this->indexList.push_back(c);
 
 	}
-
-
 };
 
 int ORI(Point2D p1, Point2D p2,Point2D p3){
@@ -123,10 +121,7 @@ float getDistance(Point2D &a,Point2D &b){
 
 ///https://stackoverflow.com/questions/39984709/how-can-i-check-wether-a-point-is-inside-the-circumcircle-of-3-points
 bool CheckByDeterminand(vector<Point2D> &pointList,vector<Triangle> &triangleList){
-	cout << "PS:" << pointList.size()<< endl;
-	cout << "TS:" << triangleList.size()<< endl;
 	for(int i=0;i<triangleList.size();i++){
-		cout << "CT:" << i<< endl;
 		Point2D a = pointList[triangleList[i].indexList[0]];
 		Point2D b = pointList[triangleList[i].indexList[1]];
 		Point2D c = pointList[triangleList[i].indexList[2]];
@@ -137,7 +132,6 @@ bool CheckByDeterminand(vector<Point2D> &pointList,vector<Triangle> &triangleLis
 				triangleList[i].indexList[2]!=ii){
 
 			Point2D d=pointList[ii];
-			cout << d.x << " " << d.y << endl;
 			float ax_ = a.x-d.x;
 			float ay_ = a.y-d.y;
 			float bx_ = b.x-d.x;
