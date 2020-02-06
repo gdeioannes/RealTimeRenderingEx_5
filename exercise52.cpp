@@ -14,20 +14,6 @@
 
 using namespace std;
 
-class linkFace{
-
-};
-
-class Segment{
-public:
-	//index in vertexList
-	int a,b;
-
-	Segment(int a,int b){
-		this->a=a;
-		this->b=b;
-	}
-};
 
 class Point2D{
 public:
@@ -101,11 +87,10 @@ void orderCCW(vector<int> &indexlist, vector<Point2D> &pointList){
 	if(ORI(pointList[indexlist[0]],pointList[indexlist[1]],pointList[indexlist[2]])!=-1){
 		return;
 	}else{
-		cout << "Change order" << endl;
 		int saveIndex=indexlist[1];
 		int saveIndex2=indexlist[2];
-		indexlist[1]=saveIndex2;
-		indexlist[2]=saveIndex;
+		//indexlist[1]=saveIndex2;
+		//indexlist[2]=saveIndex;
 	}
 
 }
@@ -141,59 +126,39 @@ void GetPointList(vector<Triangle> &triangleList,vector<Point2D> &pointList){
 }
 
 ///https://stackoverflow.com/questions/39984709/how-can-i-check-wether-a-point-is-inside-the-circumcircle-of-3-points
-bool CheckByDeterminand(vector<Point2D> &pointList,vector<Triangle> &triangleList){
-	for(int i=0;i<triangleList.size();i++){
-		Point2D a = pointList[triangleList[i].indexList[0]];
-		Point2D b = pointList[triangleList[i].indexList[1]];
-		Point2D c = pointList[triangleList[i].indexList[2]];
-
-		for(int ii=0;ii<pointList.size();ii++){
-			if(	triangleList[i].indexList[0]!=ii ||
-				triangleList[i].indexList[1]!=ii ||
-				triangleList[i].indexList[2]!=ii){
-
-			Point2D d=pointList[ii];
-			float ax_ = a.x-d.x;
-			float ay_ = a.y-d.y;
-			float bx_ = b.x-d.x;
-			float by_ = b.y-d.y;
-			float cx_ = c.x-d.x;
-			float cy_ = c.y-d.y;
-			if ((
-				(ax_*ax_ + ay_*ay_) * (bx_*cy_-cx_*by_) -
-				(bx_*bx_ + by_*by_) * (ax_*cy_-cx_*ay_) +
-				(cx_*cx_ + cy_*cy_) * (ax_*by_-bx_*ay_)
-			) > 0){
-				return false;
-			}
-			}
-		}
-	}
-	return true;
-}
-
-bool CheckByDeterminandTriangle(vector<Point2D> &pointList,Triangle &triangle){
+bool CheckByDeterminandTriangle(vector<Point2D> &pointList,Triangle triangle,vector<vertex*> vertexList){
 
 	if(pointList.size()==0){
 		return true;
 	}
-	Point2D a = pointList[triangle.indexList[0]];
-	Point2D b = pointList[triangle.indexList[1]];
-	Point2D c = pointList[triangle.indexList[2]];
 
+	for(int k=0;k<triangle.indexList.size();k++){
+		cout << "- " << triangle.indexList[k] << " <-> ";
+
+	}
+	cout << endl;
+	Point2D a = vertexList[triangle.indexList[0]]->p;
+	Point2D b = vertexList[triangle.indexList[1]]->p;
+	Point2D c = vertexList[triangle.indexList[2]]->p;
+	cout << "A:"<< a.x << " - " << a.y << " | ";
+	cout << "B:"<< b.x << " - " << b.y << " | ";
+	cout << "C:"<< c.x << " - " << c.y << endl;
 
 	for(int ii=0;ii<pointList.size();ii++){
-		if(	triangle.indexList[0]!=ii ||
-			triangle.indexList[1]!=ii ||
-			triangle.indexList[2]!=ii){
 
-		Point2D d=pointList[ii];
-		float ax_ = a.x-d.x;
-		float ay_ = a.y-d.y;
-		float bx_ = b.x-d.x;
-		float by_ = b.y-d.y;
-		float cx_ = c.x-d.x;
-		float cy_ = c.y-d.y;
+	Point2D d=pointList[ii];
+		auto ax_ = a.x-d.x;
+		auto ay_ = a.y-d.y;
+		auto bx_ = b.x-d.x;
+		auto by_ = b.y-d.y;
+		auto cx_ = c.x-d.x;
+		auto cy_ = c.y-d.y;
+		auto num=(
+				(ax_*ax_ + ay_*ay_) * (bx_*cy_-cx_*by_) -
+				(bx_*bx_ + by_*by_) * (ax_*cy_-cx_*ay_) +
+				(cx_*cx_ + cy_*cy_) * (ax_*by_-bx_*ay_)
+			);
+		cout << "DET:" << num << endl;
 		if ((
 			(ax_*ax_ + ay_*ay_) * (bx_*cy_-cx_*by_) -
 			(bx_*bx_ + by_*by_) * (ax_*cy_-cx_*ay_) +
@@ -201,8 +166,8 @@ bool CheckByDeterminandTriangle(vector<Point2D> &pointList,Triangle &triangle){
 		) > 0){
 			return false;
 		}
-		}
 	}
+
 	return true;
 }
 
@@ -213,9 +178,8 @@ void printEdgeList(){
 	//Print edge and twin list
 	for(int i=0;i<h_edgeList.size();i++){
 		cout << "h_edge " << i << " | ";
-		cout << "Point: " << h_edgeList[i]->v->p.x << " " << h_edgeList[i]->v->p.y << " - "<< h_edgeList[i]->next->v->p.x << " " << h_edgeList[i]->next->v->p.y << " | ";
-		cout << " Twin: " << h_edgeList[i]->twin->v->p.x << " " << h_edgeList[i]->twin->v->p.y << endl;
-
+		cout << "Point: " << h_edgeList[i]->v->p.x << " " << h_edgeList[i]->v->p.y << " - "<< h_edgeList[i]->next->v->p.x << " " << h_edgeList[i]->next->v->p.y << " - " << (h_edgeList[i]->f!=nullptr) << " | ";
+		cout << " Twin: " << h_edgeList[i]->twin->v->p.x << " " << h_edgeList[i]->twin->v->p.y << " - " << h_edgeList[i]->twin->next->v->p.x << " " << h_edgeList[i]->twin->next->v->p.y   << " - " << (h_edgeList[i]->twin->f!=nullptr) << endl;
 	}
 }
 
@@ -292,9 +256,7 @@ public:
 			faceList.push_back(new_face);
 
 		}
-
-		//printEdgeList();
-
+		printEdgeList();
 		//Check for edges and merge mirrored ones
 		for(int i=0;i<h_edgeList.size();i++){
 
@@ -310,23 +272,25 @@ public:
 				   h_edgeList[i]->twin->v->p.x==h_edgeList[ii]->v->p.x &&
 				   h_edgeList[i]->twin->v->p.y==h_edgeList[ii]->v->p.y &&
 				   h_edgeList[i]->twin->f==nullptr && h_edgeList[ii]->twin->f==nullptr){
-
+					cout << "Merge" << endl;
 				   h_edgeList[i]->twin=h_edgeList[ii]->next->prev;
 				   h_edgeList[ii]->twin=h_edgeList[i]->next->prev;
 				}
 			}
 
 		}
-
-		//printEdgeList();
+		printEdgeList();
 	}
 
 
-	bool CheckByDeterminand(vector<Triangle> &triangleList){
+	bool Check(vector<Triangle> &triangleList){
 		//Will implement a strategy to check vertices adjacent to the previous edge, origin point,
 
 		for(int i=0;i<faceList.size();i++){
 			vector<Point2D> pointList;
+			cout << (faceList[i]->outer->twin->f != nullptr) << " | ";
+			cout << (faceList[i]->outer->next->twin->f != nullptr) << " | ";
+			cout << (faceList[i]->outer->next->next->twin->f != nullptr) << endl;
 
 			if(faceList[i]->outer->twin->f!=nullptr){
 				pointList.push_back(faceList[i]->outer->twin->prev->v->p);
@@ -340,8 +304,20 @@ public:
 				pointList.push_back(faceList[i]->outer->next->next->twin->prev->v->p);
 			}
 
-			if(!CheckByDeterminandTriangle(pointList,triangleList[i])){
+			for(int k=0;k<pointList.size();k++){
+				cout <<"Point "<< i << ":" << pointList[k].x<< " - " <<pointList[k].y << endl;
+			}
+
+			for(int k=0;k<triangleList[i].indexList.size();k++){
+				cout << triangleList[i].indexList[k] << " <-> ";
+
+			}
+			cout << endl;
+
+			if(!CheckByDeterminandTriangle(pointList,triangleList[i],vertexList)){
+
 				return false;
+
 			}
 		}
 
@@ -360,7 +336,7 @@ int main() {
 	dcrl.createDCEL(triangleList,pointList);
 
 	//bool result=CheckByDeterminand(pointList,triangleList);
-	bool result=dcrl.CheckByDeterminand(triangleList);
+	bool result=dcrl.Check(triangleList);
 	if(result){
 		cout << "YES";
 	}else{
