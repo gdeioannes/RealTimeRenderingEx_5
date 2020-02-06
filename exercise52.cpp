@@ -103,7 +103,8 @@ void orderCCW(vector<int> &indexlist, vector<Point2D> &pointList){
 	}else{
 		cout << "Change order" << endl;
 		int saveIndex=indexlist[1];
-		indexlist[1]=indexlist[indexlist[2]];
+		int saveIndex2=indexlist[2];
+		indexlist[1]=saveIndex2;
 		indexlist[2]=saveIndex;
 	}
 
@@ -220,7 +221,7 @@ void printEdgeList(){
 }
 
 public:
-	vector<vertex> vertexList;
+	vector<vertex*> vertexList;
 	vector<h_edge*> h_edgeList;
 	vector<face*> faceList;
 	void createDCEL(vector<Triangle> &triangleList,vector<Point2D> &pointList){
@@ -228,37 +229,37 @@ public:
 		for(int i=0;i<pointList.size();i++){
 			vertex* newVertex=new vertex;
 			newVertex->p=pointList[i];
-			vertexList.push_back(*newVertex);
+			vertexList.push_back(newVertex);
 		}
 
 		//create elements reading the segments,
 		for(int i=0;i<triangleList.size();i++){
 			face* new_face= new face;
-
+			cout << triangleList[i].indexList[1] << endl;
+			cout << triangleList[i].indexList.size() << endl;
 			h_edge* new_h_edge1=new h_edge;
-			new_h_edge1->v=&vertexList[triangleList[i].indexList[0]];
+			new_h_edge1->v=vertexList[triangleList[i].indexList[0]];
 			h_edge* new_h_edge_twin1=new h_edge;
-			new_h_edge_twin1->v=&vertexList[triangleList[i].indexList[1]];
-
+			new_h_edge_twin1->v=vertexList[triangleList[i].indexList[1]];
+			cout << "Debug" << endl;
 			new_h_edge1->twin=new_h_edge_twin1;
 			new_h_edge_twin1->twin=new_h_edge1;
 
 			h_edge* new_h_edge2=new h_edge;
-			new_h_edge2->v=&vertexList[triangleList[i].indexList[1]];
+			new_h_edge2->v=vertexList[triangleList[i].indexList[1]];
 			h_edge* new_h_edge_twin2=new h_edge;
-			new_h_edge_twin2->v=&vertexList[triangleList[i].indexList[2]];
+			new_h_edge_twin2->v=vertexList[triangleList[i].indexList[2]];
 
 			new_h_edge2->twin=new_h_edge_twin2;
 			new_h_edge_twin2->twin=new_h_edge2;
 
 			h_edge* new_h_edge3=new h_edge;
-			new_h_edge3->v=&vertexList[triangleList[i].indexList[2]];
+			new_h_edge3->v=vertexList[triangleList[i].indexList[2]];
 			h_edge* new_h_edge_twin3=new h_edge;
-			new_h_edge_twin3->v=&vertexList[triangleList[i].indexList[0]];
+			new_h_edge_twin3->v=vertexList[triangleList[i].indexList[0]];
 
 			new_h_edge3->twin=new_h_edge_twin3;
 			new_h_edge_twin3->twin=new_h_edge3;
-
 
 			new_h_edge1->next=new_h_edge2;
 			new_h_edge2->next=new_h_edge3;
@@ -297,12 +298,16 @@ public:
 		//printEdgeList();
 
 		cout << "Before Edge List:" << h_edgeList.size() << endl;
+		cout << "Debug" << endl;
 		//Check for edges and merge mirrored ones
 		for(int i=0;i<h_edgeList.size();i++){
+
 			for(int ii=0;ii<h_edgeList.size();ii++){
+				cout << "Debug" << endl;
 				if(i==ii){
 					continue;
 				}
+
 				//Check same edges and mirror
 				if(h_edgeList[i]->v->p.x==h_edgeList[ii]->twin->v->p.x &&
 				   h_edgeList[i]->v->p.y==h_edgeList[ii]->twin->v->p.y &&
@@ -310,27 +315,14 @@ public:
 				   h_edgeList[i]->twin->v->p.y==h_edgeList[ii]->v->p.y &&
 				   h_edgeList[i]->twin->f==nullptr && h_edgeList[ii]->twin->f==nullptr){
 
-				   cout << (h_edgeList[i]->twin->f!=nullptr) << endl;
-				   cout << (h_edgeList[ii]->twin->f!=nullptr) << endl;
-				   cout << h_edgeList[i]->v->p.x << " " << h_edgeList[i]->v->p.y << " | ";
-				   cout << h_edgeList[i]->next->v->p.x << " " << h_edgeList[i]->next->v->p.y << endl;
-
-				   cout << h_edgeList[ii]->v->p.x << " " << h_edgeList[ii]->v->p.y << " | ";
-				   cout << h_edgeList[ii]->next->v->p.x << " " << h_edgeList[ii]->next->v->p.y << endl;
-
 				   h_edgeList[i]->twin=h_edgeList[ii]->next->prev;
 				   h_edgeList[ii]->twin=h_edgeList[i]->next->prev;
-
-				   cout << (h_edgeList[i]->twin->f!=nullptr) << endl;
-				   cout << (h_edgeList[ii]->twin->f!=nullptr) << endl;
 				}
-
 			}
+
 		}
 		cout << "After Edge List:" << h_edgeList.size() << endl;
-
 		//printEdgeList();
-
 	}
 
 
@@ -379,6 +371,7 @@ int main() {
 	GetPointList(triangleList,pointList);
 	DCEL dcrl;
 	dcrl.createDCEL(triangleList,pointList);
+	cout << "Debug" << endl;
 	//bool result=CheckByDeterminand(pointList,triangleList);
 	bool result=dcrl.CheckByDeterminand(triangleList);
 	if(result){

@@ -61,7 +61,8 @@ void orderCCW(vector<int> &indexlist, vector<Point2D> &pointList){
 	}else{
 		cout << "Change order" << endl;
 		int saveIndex=indexlist[1];
-		indexlist[1]=indexlist[indexlist[2]];
+		int saveIndex2=indexlist[2];
+		indexlist[1]=saveIndex2;
 		indexlist[2]=saveIndex;
 	}
 
