@@ -175,7 +175,6 @@ bool CheckByDeterminand(vector<Point2D> &pointList,vector<Triangle> &triangleLis
 bool CheckByDeterminandTriangle(vector<Point2D> &pointList,Triangle &triangle){
 
 	if(pointList.size()==0){
-		cout << "Debug: Point List size 0 CheckByDeterminandTriangle" << endl;
 		return true;
 	}
 	Point2D a = pointList[triangle.indexList[0]];
@@ -235,13 +234,12 @@ public:
 		//create elements reading the segments,
 		for(int i=0;i<triangleList.size();i++){
 			face* new_face= new face;
-			cout << triangleList[i].indexList[1] << endl;
-			cout << triangleList[i].indexList.size() << endl;
+
 			h_edge* new_h_edge1=new h_edge;
 			new_h_edge1->v=vertexList[triangleList[i].indexList[0]];
 			h_edge* new_h_edge_twin1=new h_edge;
 			new_h_edge_twin1->v=vertexList[triangleList[i].indexList[1]];
-			cout << "Debug" << endl;
+
 			new_h_edge1->twin=new_h_edge_twin1;
 			new_h_edge_twin1->twin=new_h_edge1;
 
@@ -297,13 +295,11 @@ public:
 
 		//printEdgeList();
 
-		cout << "Before Edge List:" << h_edgeList.size() << endl;
-		cout << "Debug" << endl;
 		//Check for edges and merge mirrored ones
 		for(int i=0;i<h_edgeList.size();i++){
 
 			for(int ii=0;ii<h_edgeList.size();ii++){
-				cout << "Debug" << endl;
+
 				if(i==ii){
 					continue;
 				}
@@ -321,7 +317,7 @@ public:
 			}
 
 		}
-		cout << "After Edge List:" << h_edgeList.size() << endl;
+
 		//printEdgeList();
 	}
 
@@ -329,15 +325,9 @@ public:
 	bool CheckByDeterminand(vector<Triangle> &triangleList){
 		//Will implement a strategy to check vertices adjacent to the previous edge, origin point,
 
-		cout << "Face sizes:" << faceList.size() << endl;
 		for(int i=0;i<faceList.size();i++){
 			vector<Point2D> pointList;
-			cout << "check triangle" << endl;
-			cout << " " << faceList[i]->outer->v->p.x<< " " << faceList[i]->outer->v->p.y << " | ";
-			cout << faceList[i]->outer->next->v->p.x << " " << faceList[i]->outer->next->v->p.y << endl;
-			cout << (faceList[i]->outer->twin->f!=nullptr) << endl;
-			cout << (faceList[i]->outer->next->twin->f!=nullptr) << endl;
-			cout << (faceList[i]->outer->next->next->twin->f!=nullptr) << endl;
+
 			if(faceList[i]->outer->twin->f!=nullptr){
 				pointList.push_back(faceList[i]->outer->twin->prev->v->p);
 			}
@@ -349,15 +339,12 @@ public:
 			if(faceList[i]->outer->next->next->twin->f!=nullptr){
 				pointList.push_back(faceList[i]->outer->next->next->twin->prev->v->p);
 			}
-			cout << "Size point compare list:" << pointList.size() << endl;
 
 			if(!CheckByDeterminandTriangle(pointList,triangleList[i])){
-				cout << "End False" << endl;
 				return false;
 			}
 		}
 
-		cout << "End True" << endl;
 		return true;
 	}
 };
@@ -371,7 +358,7 @@ int main() {
 	GetPointList(triangleList,pointList);
 	DCEL dcrl;
 	dcrl.createDCEL(triangleList,pointList);
-	cout << "Debug" << endl;
+
 	//bool result=CheckByDeterminand(pointList,triangleList);
 	bool result=dcrl.CheckByDeterminand(triangleList);
 	if(result){
