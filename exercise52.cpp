@@ -132,17 +132,12 @@ bool CheckByDeterminandTriangle(vector<Point2D> &pointList,Triangle triangle,vec
 		return true;
 	}
 
-	for(int k=0;k<triangle.indexList.size();k++){
-		cout << "- " << triangle.indexList[k] << " <-> ";
-
-	}
-	cout << endl;
 	Point2D a = vertexList[triangle.indexList[0]]->p;
 	Point2D b = vertexList[triangle.indexList[1]]->p;
 	Point2D c = vertexList[triangle.indexList[2]]->p;
-	cout << "A:"<< a.x << " - " << a.y << " | ";
-	cout << "B:"<< b.x << " - " << b.y << " | ";
-	cout << "C:"<< c.x << " - " << c.y << endl;
+	//cout << "A:"<< a.x << " - " << a.y << " | ";
+	//cout << "B:"<< b.x << " - " << b.y << " | ";
+	//cout << "C:"<< c.x << " - " << c.y << endl;
 
 	for(int ii=0;ii<pointList.size();ii++){
 
@@ -158,7 +153,7 @@ bool CheckByDeterminandTriangle(vector<Point2D> &pointList,Triangle triangle,vec
 				(bx_*bx_ + by_*by_) * (ax_*cy_-cx_*ay_) +
 				(cx_*cx_ + cy_*cy_) * (ax_*by_-bx_*ay_)
 			);
-		cout << "DET:" << num << endl;
+		//cout << "DET:" << num << endl;
 		if ((
 			(ax_*ax_ + ay_*ay_) * (bx_*cy_-cx_*by_) -
 			(bx_*bx_ + by_*by_) * (ax_*cy_-cx_*ay_) +
@@ -256,7 +251,7 @@ public:
 			faceList.push_back(new_face);
 
 		}
-		printEdgeList();
+		//printEdgeList();
 		//Check for edges and merge mirrored ones
 		for(int i=0;i<h_edgeList.size();i++){
 
@@ -272,14 +267,14 @@ public:
 				   h_edgeList[i]->twin->v->p.x==h_edgeList[ii]->v->p.x &&
 				   h_edgeList[i]->twin->v->p.y==h_edgeList[ii]->v->p.y &&
 				   h_edgeList[i]->twin->f==nullptr && h_edgeList[ii]->twin->f==nullptr){
-					cout << "Merge" << endl;
+					//cout << "Merge" << endl;
 				   h_edgeList[i]->twin=h_edgeList[ii]->next->prev;
 				   h_edgeList[ii]->twin=h_edgeList[i]->next->prev;
 				}
 			}
 
 		}
-		printEdgeList();
+		//printEdgeList();
 	}
 
 
@@ -288,9 +283,7 @@ public:
 
 		for(int i=0;i<faceList.size();i++){
 			vector<Point2D> pointList;
-			cout << (faceList[i]->outer->twin->f != nullptr) << " | ";
-			cout << (faceList[i]->outer->next->twin->f != nullptr) << " | ";
-			cout << (faceList[i]->outer->next->next->twin->f != nullptr) << endl;
+
 
 			if(faceList[i]->outer->twin->f!=nullptr){
 				pointList.push_back(faceList[i]->outer->twin->prev->v->p);
@@ -304,15 +297,14 @@ public:
 				pointList.push_back(faceList[i]->outer->next->next->twin->prev->v->p);
 			}
 
-			for(int k=0;k<pointList.size();k++){
-				cout <<"Point "<< i << ":" << pointList[k].x<< " - " <<pointList[k].y << endl;
-			}
+			//for(int k=0;k<pointList.size();k++){
+			//	cout <<"Point "<< i << ":" << pointList[k].x<< " - " <<pointList[k].y << endl;
+			//}
 
-			for(int k=0;k<triangleList[i].indexList.size();k++){
-				cout << triangleList[i].indexList[k] << " <-> ";
-
-			}
-			cout << endl;
+			//for(int k=0;k<triangleList[i].indexList.size();k++){
+			//	cout << triangleList[i].indexList[k] << " <-> ";
+			//}
+			//cout << endl;
 
 			if(!CheckByDeterminandTriangle(pointList,triangleList[i],vertexList)){
 
