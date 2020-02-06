@@ -56,7 +56,7 @@ int ORI(Point2D p1, Point2D p2,Point2D p3){
 }
 
 void orderCCW(vector<int> &indexlist, vector<Point2D> &pointList){
-	if(ORI(pointList[indexlist[0]],pointList[indexlist[1]],pointList[indexlist[2]])==-1){
+	if(ORI(pointList[indexlist[0]],pointList[indexlist[1]],pointList[indexlist[2]])!=-1){
 		return;
 	}else{
 		//cout << "Change order" << endl;
