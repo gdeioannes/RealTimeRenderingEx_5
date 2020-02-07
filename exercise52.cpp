@@ -1,10 +1,5 @@
-//============================================================================
-// Name        : Ex5.cpp
-// Author      : 
-// Version     :
-// Copyright   : Your copyright notice
-// Description : Hello World in C++, Ansi-style
-//============================================================================
+// Author      : Gabriel De Ioannes
+// author 	   : Sagar Nagaraj
 
 #include <iostream>
 #include <vector>
@@ -138,6 +133,13 @@ bool CheckByDeterminandTriangle(vector<Point2D> &pointList,Triangle triangle,vec
 	//cout << "A:"<< a.x << " - " << a.y << " | ";
 	//cout << "B:"<< b.x << " - " << b.y << " | ";
 	//cout << "C:"<< c.x << " - " << c.y << endl;
+
+	/*if(ORI(a,b,c)!=-1){
+		Point2D s1=b;
+		Point2D s2=c;
+		b=s2;
+		c=s1;
+	}*/
 
 	for(int ii=0;ii<pointList.size();ii++){
 
